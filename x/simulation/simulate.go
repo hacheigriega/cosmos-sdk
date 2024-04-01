@@ -233,6 +233,8 @@ func SimulateFromSeed(
 			break
 		}
 
+		app.WorkingHash()
+
 		// Generate a random RequestBeginBlock with the current validator set
 		// for the next block
 		finalizeBlockReq = RandomRequestFinalizeBlock(r, params, validators, pastTimes, pastVoteInfos, eventStats.Tally, blockHeight, blockTime, proposerAddress)

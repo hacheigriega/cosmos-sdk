@@ -869,7 +869,7 @@ func (app *BaseApp) FinalizeBlock(req *abci.RequestFinalizeBlock) (res *abci.Res
 		// only return if we are not aborting
 		if !aborted {
 			if res != nil {
-				res.AppHash = app.workingHash()
+				res.AppHash = app.WorkingHash()
 			}
 
 			return res, err
@@ -883,7 +883,7 @@ func (app *BaseApp) FinalizeBlock(req *abci.RequestFinalizeBlock) (res *abci.Res
 	// if no OE is running, just run the block (this is either a block replay or a OE that got aborted)
 	res, err = app.internalFinalizeBlock(context.Background(), req)
 	if res != nil {
-		res.AppHash = app.workingHash()
+		res.AppHash = app.WorkingHash()
 	}
 
 	return res, err
@@ -964,12 +964,12 @@ func (app *BaseApp) Commit() (*abci.ResponseCommit, error) {
 	return resp, nil
 }
 
-// workingHash gets the apphash that will be finalized in commit.
+// WorkingHash gets the apphash that will be finalized in commit.
 // These writes will be persisted to the root multi-store (app.cms) and flushed to
 // disk in the Commit phase. This means when the ABCI client requests Commit(), the application
 // state transitions will be flushed to disk and as a result, but we already have
 // an application Merkle root.
-func (app *BaseApp) workingHash() []byte {
+func (app *BaseApp) WorkingHash() []byte {
 	// Write the FinalizeBlock state into branched storage and commit the MultiStore.
 	// The write to the FinalizeBlock state writes all state transitions to the root
 	// MultiStore (app.cms) so when Commit() is called it persists those values.
@@ -977,7 +977,7 @@ func (app *BaseApp) workingHash() []byte {
 
 	// Get the hash of all writes in order to return the apphash to the comet in finalizeBlock.
 	commitHash := app.cms.WorkingHash()
-	app.logger.Debug("hash of all writes", "workingHash", fmt.Sprintf("%X", commitHash))
+	app.logger.Debug("hash of all writes", "WorkingHash", fmt.Sprintf("%X", commitHash))
 
 	return commitHash
 }
