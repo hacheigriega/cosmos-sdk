@@ -223,6 +223,8 @@ func SimulateFromSeed(
 
 		logWriter.AddEntry(EndBlockEntry(blockHeight))
 
+		app.WorkingHash()
+
 		if config.Commit {
 			app.Commit()
 		}
@@ -232,8 +234,6 @@ func SimulateFromSeed(
 			stopEarly = true
 			break
 		}
-
-		app.WorkingHash()
 
 		// Generate a random RequestBeginBlock with the current validator set
 		// for the next block
